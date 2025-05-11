@@ -1,0 +1,11 @@
+# Environment Variables file
+.env
+
+# Api testing file
+client.rest
+
+# Dependencies Directories
+node_modules/
+
+# Generated output
+dist
