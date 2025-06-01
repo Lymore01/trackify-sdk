@@ -7,7 +7,15 @@
     "javascript",
     "trackify"
   ],
-  "main": "src/index.ts",
+  "main": "dist/main/index.js",
+  "module": "dist/module/index.js",
+  "types": "dist/module/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "clean": "rimraf dist",
     "dev": "node dist/main/index.js",
