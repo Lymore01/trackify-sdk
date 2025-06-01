@@ -1,5 +1,4 @@
 import { createClient } from '../src/index';
-import { App } from '../src/lib/types';
 import { TrackifyLinkApi } from '../src/packages/TrackifyLinkApi';
 import { TrackifyClient } from '../src/TrackifyClient';
 
@@ -8,7 +7,7 @@ const URL = 'https://fake.trackify.com';
 
 const trackify = createClient(KEY, URL);
 
-const mockApps: App[] = [
+const mockApps = [
   { id: 'app123', name: 'myApp' },
   { id: 'app456', name: 'anotherApp' },
 ];
@@ -34,15 +33,20 @@ describe('TrackifyClient.from()', () => {
 
     // stub
     jest.spyOn(client, 'listApps').mockResolvedValue({
-      data: mockApps,
+      data: {
+        success: true,
+        message: 'Apps retrieved successfully',
+        data: mockApps,
+      },
       error: null,
     });
   });
 
   it('should return a TrackifyLinkApi instance if app is found', async () => {
     const linkApi = await client.from('myApp');
+    console.log('link: ', linkApi);
     expect(linkApi).toBeInstanceOf(TrackifyLinkApi);
-    expect((linkApi as any).id).toBe('app123');
+    expect((linkApi as TrackifyLinkApi).id).toBe('app123');
   });
 
   it('should throw if app is not found', async () => {

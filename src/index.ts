@@ -1,6 +1,7 @@
+import TrackifyWebhook from './packages/TrackifyWebhook';
 import { TrackifyClient } from './TrackifyClient';
 
-export const createClient = (
+const createClient = (
   trackifyApiKey: string,
   trackifyUrl: string,
 ): TrackifyClient => {
@@ -9,3 +10,5 @@ export const createClient = (
     url: trackifyUrl,
   });
 };
+
+export { createClient, TrackifyWebhook };

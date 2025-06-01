@@ -3,7 +3,7 @@ import { TrackifyApiError, TrackifyUnknownError } from './errors';
 import { isPlainObject } from './helpers';
 
 export type Fetch = typeof fetch;
-export type RequestMethodType = 'GET' | 'POST' | 'UPDATE' | 'DELETE';
+export type RequestMethodType = 'GET' | 'POST' | 'PUT' | 'DELETE';
 export interface RequestOptions {
   headers?: {
     [key: string]: string;
@@ -75,7 +75,7 @@ export async function _handleRequest(
         return result.json();
       })
       .then((data) => resolve(data))
-      .catch((error) => handleError(error, resolve));
+      .catch((error) => handleError(error, reject));
   });
 }
 
@@ -110,5 +110,5 @@ export async function put(
   body: object,
   options?: RequestOptions,
 ) {
-  return _handleRequest(fetcher, 'UPDATE', url, options, body);
+  return _handleRequest(fetcher, 'PUT', url, options, body);
 }

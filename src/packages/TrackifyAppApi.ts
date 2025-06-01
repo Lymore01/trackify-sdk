@@ -3,7 +3,11 @@ import { Fetch, get, post, put } from '../lib/fetch';
 import { App } from '../lib/types';
 
 export interface AppResponse {
-  data: App | App[] | null;
+  data: {
+    success: boolean;
+    message: string;
+    data?: App[] | null;
+  } | null;
   error: null | TrackifyError;
 }
 
@@ -71,9 +75,9 @@ export class TrackifyAppApi {
     try {
       const data = await post(
         this.fetch,
-        this.config.url,
+        `${this.config.url}/application`,
         {
-          name,
+          appName: name,
         },
         {
           headers: this.authHeaders,

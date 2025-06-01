@@ -18,6 +18,7 @@
     "test": "run-s test:types test:run",
     "test:types": "run-s build:module && tsd --files tests/*.test-d.ts",
     "test:run": "jest --runInBand",
+    "test:bail": "jest --bail",
     "test:coverage": "jest --runInBand --coverage",
     "prepare": "husky"
   },

@@ -42,3 +42,17 @@ export const isTrackifyError = (error: unknown) => {
     typeof error === 'object' && error !== null && '__isStorageError' in error
   );
 };
+
+export class MissingHeadersError extends TrackifyError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'MissingHeaderError';
+  }
+}
+
+export class VerificationFailedError extends TrackifyError {
+  constructor(message: string) {
+    super(message);
+    this.name = 'VerificationFailedError';
+  }
+}

@@ -3,15 +3,19 @@ import { Fetch, get, post, put, remove } from '../lib/fetch';
 import { Link } from '../lib/types';
 
 export interface LinkResponse {
-  data: Link | null;
+  data: {
+    success: boolean;
+    message: string;
+    data?: Link[] | null;
+  } | null;
   error: null | TrackifyError;
 }
 
 export class TrackifyLinkApi {
-  protected id: string;
-  protected url: string;
-  protected key: string;
-  protected fetch: Fetch;
+  public id: string;
+  public url: string;
+  public key: string;
+  public fetch: Fetch;
   private authHeaders: Record<string, string>;
 
   constructor(
@@ -30,11 +34,15 @@ export class TrackifyLinkApi {
     };
   }
 
-  async createLink({ original, description }: Link): Promise<LinkResponse> {
+  async createLink({
+    original,
+    description,
+  }: Pick<Link, 'original' | 'description'>): Promise<LinkResponse> {
     try {
       let payload = {
-        original,
+        originalUrl: original,
         description,
+        appId: this.id,
       };
       const data = await post(this.fetch, `${this.url}/url`, payload, {
         headers: this.authHeaders,
@@ -58,7 +66,8 @@ export class TrackifyLinkApi {
   async updateLink(
     id: string,
     payload: {
-      original: string;
+      originalUrl?: string;
+      description?: string;
     },
   ): Promise<LinkResponse> {
     try {
@@ -81,9 +90,30 @@ export class TrackifyLinkApi {
     }
   }
 
-  async getLink(id: string): Promise<LinkResponse> {
+  async getLink(shortId: string): Promise<LinkResponse> {
     try {
-      const data = await get(this.fetch, `${this.url}/url?appId=${id}`, {
+      const data = await get(this.fetch, `${this.url}/url?shortId=${shortId}`, {
+        headers: this.authHeaders,
+      });
+
+      return {
+        data,
+        error: null,
+      };
+    } catch (error) {
+      if (isTrackifyError(error)) {
+        return {
+          data: null,
+          error: error as unknown as TrackifyError,
+        };
+      }
+      throw error;
+    }
+  }
+
+  async getLinks(): Promise<LinkResponse> {
+    try {
+      const data = await get(this.fetch, `${this.url}/url?appId=${this.id}`, {
         headers: this.authHeaders,
       });
 
